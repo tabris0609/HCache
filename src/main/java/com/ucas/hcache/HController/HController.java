@@ -1,9 +1,10 @@
-package hcache.H_Client;
+package com.ucas.hcache.HController;
 
-import  hcache.memcached.*;
-import net.rubyeye.xmemcached.exception.MemcachedException;
+import com.ucas.hcache.memcached.MemCached;
 
-import java.util.concurrent.TimeoutException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 // import package write or read .
 /**
@@ -14,13 +15,19 @@ import java.util.concurrent.TimeoutException;
    modify by hcs on 16/6/10
 */
 
-public class HCacheClient {
+public class HController {
     private boolean memecached = false;
     private boolean local_cache = false;
     private MemCached memcache;
     private cache local;
     private String tableName;
-    public HCacheClient() {
+    public HController() throws IOException{
+        FileInputStream in = new FileInputStream("conf/HCache.conf");
+        Properties properties = new Properties();
+        properties.load(in);
+
+        this.memecached = "on".equals(properties.getProperty("redis_cache"));
+        this.local_cache = "on".equals(properties.getProperty("local_cache"));
 
     }
 

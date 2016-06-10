@@ -1,4 +1,4 @@
-package hcache.memcached;
+package com.ucas.hcache.memcached;
 /*
 * @author: wjf
 * @version: 2016年6月10日 上午11:01:14

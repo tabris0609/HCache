@@ -1,4 +1,4 @@
-package hcache.HBaseOperator;
+package com.ucas.hcache.HBaseOperator;
 
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
