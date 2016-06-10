@@ -1,10 +1,8 @@
-package com.ucas.hcache.HBaseOperator;
+package com.ucas.hcache.HController;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
-import org.apache.hadoop.conf.Configuration;
-
 
 import java.io.IOException;
 
@@ -47,4 +45,6 @@ public class TableOperator {
             e.printStackTrace();
         }
     }
+
+    //public static void putData(String key, )
 }
