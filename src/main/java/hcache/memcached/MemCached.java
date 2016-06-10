@@ -13,12 +13,15 @@ import net.rubyeye.xmemcached.XMemcachedClientBuilder;
 import net.rubyeye.xmemcached.exception.MemcachedException;
 
 public class MemCached {
+	private static final String ip="192.168.26.129";
+	private static final int port=12000;
 	private static MemcachedClientBuilder mcb=null;
 	private static MemcachedClient mc=null;
 	static{
 		try {
 			mcb=new XMemcachedClientBuilder();
 			mc=mcb.build();
+			mc.addServer(ip, port);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,6 +64,10 @@ public class MemCached {
 		}
 		if(obj==null)return false;
 		else return true;
+	}
+	public static void main(String[] args) throws TimeoutException,  MemcachedException, InterruptedException{
+		mc.add("name", 100, "wangjianfei");
+		System.out.println(mc.get("name"));
 	}
 	
 
