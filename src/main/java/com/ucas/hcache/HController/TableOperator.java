@@ -22,6 +22,14 @@ public class TableOperator {
         hTables = new HashMap<String, HTable>();
     }
 
+    /**
+     *
+     * @param tableName
+     * table name to create
+     * @param columnFamilys
+     * hbase columnFamilys of "tablename"
+     * @throws IOException
+     */
     public static void createTable(String tableName, String[] columnFamilys) throws IOException {
         HBaseAdmin hAdmin = new HBaseAdmin(conf);
         if (hAdmin.tableExists(tableName)) {
@@ -37,6 +45,11 @@ public class TableOperator {
         hAdmin.close();
     }
 
+    /**
+     *
+     * @param tableName
+     * @throws IOException
+     */
     public static void deleteTable(String tableName) throws IOException {
         try{
             HBaseAdmin hAdmin = new HBaseAdmin(conf);
@@ -54,27 +67,48 @@ public class TableOperator {
         }
     }
 
+    /**
+     *
+     * @param tableName
+     * @param columnFamily
+     * @param row_key
+     * @param col_key
+     * @param value
+     * @throws IOException
+     */
     public static void putData(String tableName, String columnFamily,
                                String row_key, String col_key, String value) throws IOException {
         HTable hTable = null;
-        if (hTables.containsKey(tableName)) {
-            hTable = hTables.get(tableName);
-        }
-        else {
-            hTable = new HTable(conf, tableName);
-            hTables.put(tableName, hTable);
-        }
+        hTable = gethTable(tableName);
+
         Put put = new Put(row_key.getBytes());
         put.add(columnFamily.getBytes(), col_key.getBytes(), value.getBytes());
         hTable.put(put);
     }
 
+    /**
+     *
+     * @param tableName
+     * @param columnFamily
+     * @param row_key
+     * @param col_key
+     * @param value
+     * @throws IOException
+     */
     public static void getData(String tableName, String columnFamily,
                                String row_key, String col_key, String value) throws IOException {
         HTable hTable = null;
-        if (hTables.containsKey(ta))
+        hTable = gethTable(tableName);
+
+
     }
 
+    /**
+     *
+     * @param tableName
+     * @return
+     * @throws IOException
+     */
     private static HTable gethTable(String tableName) throws IOException{
         if (hTables.containsKey(tableName)) {
             return hTables.get(tableName);
