@@ -1,48 +1,47 @@
 package hcache.H_Client;
 
+import  hcache.memcached.*;
+
+// import package write or read .
 /**
  * Created by liujingkun on 16/6/10.
  */
 
-
-
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
-
-import java.io.IOException;
+/*
+   modify by hcs on 16/6/10
+*/
 
 public class HCacheClient {
     private boolean memecached = false;
     private boolean local_cache = false;
-    private Memcache memcache;
+    private MemCached memcache;
     private cache local;
     private String tableName;
     public HCacheClient() {
 
     }
+
     public void put(String key, String value){
         if(local_cache)
         {
-             memecached.delete(key)
+             memcache.delete(key);
         }
         if(memecached)
         {
-            local.delete(key)
+            local.delete(key);
         }
+        write()
 
     }
 
-    public String get(){
+    public String get(String key){
         if(local_cache.cotain(key)) {
-            return local_cache.get(key)
+            return local_cache.get(tableName,key);
         }
         if(memecached.contain(key)) {
-            return memecached.get(key)
+            return memecached.get(tableName,key);
         }
 
-        return
+        return read(tableName,key);
     }
 }
