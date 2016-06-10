@@ -21,5 +21,23 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+	<dependency>
+    <groupId>com.googlecode.xmemcached</groupId>
+    <artifactId>xmemcached</artifactId>
+    <version>2.0.0</version>
+	</dependency>
+	<!-- http://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+	<dependency>
+	    <groupId>org.apache.hbase</groupId>
+	    <artifactId>hbase-client</artifactId>
+	    <version>0.98.17-hadoop2</version>
+	</dependency>
+
+	<!-- http://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
+	<dependency>
+	    <groupId>org.apache.hadoop</groupId>
+	    <artifactId>hadoop-client</artifactId>
+	    <version>2.6.4</version>
+	</dependency>
   </dependencies>
 </project>
