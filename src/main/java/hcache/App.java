@@ -1,4 +1,4 @@
-package ucas.hcache;
+package hcache;
 
 /**
  * Hello world!
