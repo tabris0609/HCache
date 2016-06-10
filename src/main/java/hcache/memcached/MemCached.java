@@ -24,9 +24,17 @@ public class MemCached {
 			e.printStackTrace();
 		}
 	}
-	public void set(String key,String value,int exp) throws TimeoutException, InterruptedException, MemcachedException{
-		
-		mc.add(key, exp, value);
+	public void set(String key,String value,int exp) {
+
+		try {
+			mc.add(key, exp, value);
+		} catch (TimeoutException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (MemcachedException e) {
+			e.printStackTrace();
+		}
 	}
 	public String get(String key){
 		String value=null;

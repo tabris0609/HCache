@@ -47,16 +47,10 @@ public class HCacheClient {
         String value = read(tableName,key);
         if(local_cache)
             local.set(key,value);
+
         if(memecached)
-            try {
-                memcache.set(key,value,1000);
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (MemcachedException e) {
-                e.printStackTrace();
-            }
+            memcache.set(key,value,1000);
+
         return value;
     }
 }
