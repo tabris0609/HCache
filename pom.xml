@@ -15,29 +15,39 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-	<dependency>
-    <groupId>com.googlecode.xmemcached</groupId>
-    <artifactId>xmemcached</artifactId>
-    <version>2.0.0</version>
-	</dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>3.8.1</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.googlecode.xmemcached</groupId>
+        <artifactId>xmemcached</artifactId>
+        <version>2.0.0</version>
+      </dependency>
 	<!-- http://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
-	<dependency>
+      <dependency>
 	    <groupId>org.apache.hbase</groupId>
 	    <artifactId>hbase-client</artifactId>
-	    <version>0.98.17-hadoop2</version>
-	</dependency>
+	    <version>0.98.18-hadoop2</version>
+      </dependency>
 
 	<!-- http://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
-	<dependency>
+      <dependency>
 	    <groupId>org.apache.hadoop</groupId>
 	    <artifactId>hadoop-client</artifactId>
-	    <version>2.6.4</version>
-	</dependency>
+	    <version>2.6.0</version>
+          <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-common</artifactId>
+          <version>2.6.0</version>
+      </dependency>
+
+
   </dependencies>
 </project>

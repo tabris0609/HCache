@@ -67,8 +67,7 @@ public class MemCached {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(obj==null)return false;
-		else return true;
+		return obj != null;
 	}
 	
 
