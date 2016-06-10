@@ -1,6 +1,9 @@
 package hcache.H_Client;
 
 import  hcache.memcached.*;
+import net.rubyeye.xmemcached.exception.MemcachedException;
+
+import java.util.concurrent.TimeoutException;
 
 // import package write or read .
 /**
@@ -31,17 +34,29 @@ public class HCacheClient {
             local.delete(key);
         }
         write()
-
     }
 
     public String get(String key){
-        if(local_cache.cotain(key)) {
+        if(local_cache&&local.cotain(key)) {
             return local_cache.get(tableName,key);
         }
-        if(memecached.contain(key)) {
-            return memecached.get(tableName,key);
+        if(memecached&&memcache.contain(key)) {
+            return memcache.get(key);
         }
 
-        return read(tableName,key);
+        String value = read(tableName,key);
+        if(local_cache)
+            local.set(key,value);
+        if(memecached)
+            try {
+                memcache.set(key,value,1000);
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (MemcachedException e) {
+                e.printStackTrace();
+            }
+        return value;
     }
 }
