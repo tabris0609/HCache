@@ -19,28 +19,9 @@ public class HCacheClient {
     private boolean local_cache = false;
     private Memcache memcache;
     private cache local;
-    private org.apache.hadoop.conf.Configuration configuration;
     private String tableName;
-    public HCacheClient(){
+    public HCacheClient() {
 
-    }
-    boolean create(String name) throws IOException {
-        tableName =name;
-        // create table descriptor
-        HTableDescriptor htd = new HTableDescriptor(TableName.valueOf(tableName));
-        // create column descriptor
-        HColumnDescriptor cf = new HColumnDescriptor("res");
-        htd.addFamily(cf);
-        // configure HBase
-        configuration = HBaseConfiguration.create();
-        HBaseAdmin hAdmin = new HBaseAdmin(configuration);
-        if(hAdmin.tableExists(tableName)){
-            hAdmin.disableTable(tableName);
-            hAdmin.deleteTable(tableName);
-        }
-        hAdmin.createTable(htd);
-        hAdmin.close();
-        return  true;
     }
     public void put(String key, String value){
         if(local_cache)
