@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 public class TableOperator {
     private String tableName;
-    private static Configuration
+    private static
 
     static {
        // configuration = HBaseConfiguration.create();

@@ -11,6 +11,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-common:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.xmemcached:xmemcached:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hbase:hbase-client:0.98.18-hadoop2" level="project" />
@@ -52,7 +53,6 @@
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-api:2.6.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.hadoop:hadoop-mapreduce-client-jobclient:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-annotations:2.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-common:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-math3:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: xmlenc:xmlenc:0.52" level="project" />
