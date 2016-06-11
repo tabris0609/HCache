@@ -48,6 +48,7 @@ public class TableOperator {
     /**
      *
      * @param tableName
+     * table name to delete
      * @throws IOException
      */
     public static void deleteTable(String tableName) throws IOException {
@@ -70,10 +71,15 @@ public class TableOperator {
     /**
      *
      * @param tableName
+     * the name of table to insert data
      * @param columnFamily
+     * hbase columnFamily
      * @param row_key
+     * hbase row_key
      * @param col_key
+     * hbase column key
      * @param value
+     * value
      * @throws IOException
      */
     public static void putData(String tableName, String columnFamily,
