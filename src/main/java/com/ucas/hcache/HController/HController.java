@@ -33,7 +33,7 @@ public class HController {
             this.memcache = new MemCached();
         }
         if (this.is_local_cache) {
-            this.topkcache = new TopKCache(2000,"hot");
+//            this.topkcache = new TopKCache(2000,"hot");
         }
 
     }
