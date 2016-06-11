@@ -1,7 +1,8 @@
 package com.ucas.hcache.TopCache;
 import java.util.Hashtable;
-import java.util.Objects;
-import java.util.set;
+import java.util.Iterator;
+import java.lang.Object;
+import java.lang.String;
 /**
  * Created by sonny on 2016/6/10.
  */
@@ -11,28 +12,53 @@ public class TopKCache {
     private Hashtable<String,Entry> nodes;
     private int currentSize;
     private boolean lru ;
-    private boolean hot ;
-    private int countPeriod = 5;
-    private double alpha = 0.2;
+    public boolean hot ;
+    private int countPeriod = 5;     //confirm by test
+    private double alpha = 0.2;      //confirm by test
     private int period = 0;
 
+    public TopKCache(int confSize, String strategy)
+    {
+        cachesize = confSize;
+        currentSize = 0;
+        nodes = new Hashtable<String,Entry>();
+        if(strategy.equals("lru"))
+        {
+            lru =true;
+            hot =false;
+        }
+        else
+        {
+            hot = true;
+            lru =false;
+        }
+
+    }
+    /**
+     * hot=alpha*cnt/countPeriod+(1-alpha)*hot
+     */
     private void hot_update_grade()
     {
-        Set<String> keys = nodes.KeySet();
-        Set<String>::iterator it = key.iterator();
-        while(it.hasNext()){
-            String str =it.next();
+        //Set<String> keys = nodes.KeySet();
+        Iterator<String> iterator   = nodes.keySet().iterator();
+        while(iterator.hasNext()){
+            String str =iterator.next();
             Entry update = nodes.get(str);
             update.hot = alpha*update.cnt/countPeriod+(1-alpha)*update.hot;
             update.cnt = 0;
             nodes.put(str,update);
         }
     }
+
+    /**
+     *
+     * @param cur
+     */
     private void hot_update_cnt(Entry cur)
     {
         period++;
         cur.cnt++;
-        nodes.put(cur.key,cur);
+        nodes.put(cur.getKey(),cur);
         if(period >= countPeriod)
         {
             period =0;
@@ -40,20 +66,14 @@ public class TopKCache {
         }
     }
 
-    private void lru_update_grade();
-    public TopKCache(int confSize, String strategy)
+    private void lru_update_grade()
     {
-        cachesize = confSize;
-        currentSize = 0;
-        nodes = new Hashtable<Object,Entry>(confSize);
-        if(strategy.equals("lru"))
-            lru =true,hot =false;
-        else
-            hot = true,lru =false;
+
     }
+
     public String get(String key)
     {
-        Entry cur = nodes.get(key).value;
+        Entry cur = nodes.get(key);
         if(nodes.contains(key))
         {
             if(hot)
@@ -64,7 +84,7 @@ public class TopKCache {
             {
                 lru_update_grade();
             }
-            return cur;
+            return cur.getValue();
         }
         else
             return null;
@@ -79,7 +99,7 @@ public class TopKCache {
         }
         else
         {
-            Entry entry =new entry(key,value);
+            entry =new Entry(key,value);
             nodes.put(key,entry);
         }
     }
