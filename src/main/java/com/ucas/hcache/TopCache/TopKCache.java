@@ -112,6 +112,11 @@ public class TopKCache {
 
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public String get(String key)
     {
         Entry cur = nodes.get(key);
@@ -130,6 +135,12 @@ public class TopKCache {
         else
             return null;
     }
+
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void set(String key,String value)
     {
 
@@ -150,6 +161,10 @@ public class TopKCache {
         }
     }
 
+    /**
+     *
+     * @param key
+     */
     public void remove(String key)
     {
         boolean contains = nodes.containsKey(key);
@@ -163,6 +178,9 @@ public class TopKCache {
         }
     }
 
+    /**
+     *
+     */
     public void clear()
     {
         nodes.clear();
