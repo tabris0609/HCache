@@ -1,5 +1,3 @@
-package ucas.hcache;
-
 import com.ucas.hcache.TopCache.Entry;
 
 import java.util.*;
