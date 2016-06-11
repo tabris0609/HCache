@@ -31,7 +31,7 @@ public class TableOperator {
     public static void createTable(String tableName, String[] columnFamilys) throws IOException {
         HBaseAdmin hAdmin = new HBaseAdmin(conf);
         if (hAdmin.tableExists(tableName)) {
-            deleteTable(tableName);
+            return;
         }
         HTableDescriptor htd = new HTableDescriptor(TableName.valueOf(tableName));
         for (String cf : columnFamilys){
@@ -80,8 +80,8 @@ public class TableOperator {
      * value
      * @throws IOException
      */
-    public static void putData(String tableName, String columnFamily,
-                               String row_key, String col_key, String value) throws IOException {
+    public static void putData(String tableName, String row_key,
+                               String columnFamily, String col_key, String value) throws IOException {
         HTable hTable = null;
         hTable = get_hTable(tableName);
 
@@ -103,8 +103,8 @@ public class TableOperator {
      * @return String value
      * @throws IOException
      */
-    public static String getData(String tableName, String columnFamily,
-                               String row_key, String col_key) throws IOException {
+    public static String getData(String tableName, String row_key,
+                               String columnFamily, String col_key) throws IOException {
         HTable hTable = null;
         hTable = get_hTable(tableName);
         Get get = new Get(row_key.getBytes());

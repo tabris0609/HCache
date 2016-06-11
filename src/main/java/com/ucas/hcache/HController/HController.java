@@ -2,6 +2,7 @@ package com.ucas.hcache.HController;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import com.ucas.hcache.TopCache.TopKCache;
@@ -22,7 +23,7 @@ public class HController {
     private TopKCache topkcache;
 
     public HController() throws IOException{
-        FileInputStream in = new FileInputStream("conf/HCache.conf");
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("HCache.conf");
         Properties properties = new Properties();
         properties.load(in);
 
@@ -43,11 +44,11 @@ public class HController {
     public void put(String tableName,String row_key, String column_family,String column_key,String value){
         if(is_local_cache)
         {
-             memcache.delete(tableName+row_key+column_family+column_key);
+             topkcache.remove(tableName+row_key+column_family+column_key);
         }
         if(is_memcached)
         {
-//            topkcache.remove(tableName+row_key+column_family+column_key);
+//            memcache.delete(tableName+row_key+column_family+column_key);
         }
         try {
             TableOperator.putData(tableName,row_key,column_family,column_key,value);

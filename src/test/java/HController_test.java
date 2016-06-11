@@ -8,7 +8,7 @@ import java.io.IOException;
 public class HController_test {
     public static void main(String args[]) throws IOException {
         HController hController =new HController();
-        hController.createTable("reult", new String[]{"cf"});
+        hController.createTable("abc", new String[]{"cf"});
         hController.put("abc","row","cf","ck","value");
         String res = hController.get("abc","row","cf","ck");
         System.out.print(res);
