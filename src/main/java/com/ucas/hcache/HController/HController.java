@@ -3,7 +3,6 @@ package com.ucas.hcache.HController;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-
 import com.ucas.hcache.memcached.MemCached;
 
 // import package write or read .
