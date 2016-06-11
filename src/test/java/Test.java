@@ -10,11 +10,11 @@ public class Test {
     public static void main(String args[])
     {
         final Hashtable<String, Integer> h = new Hashtable<String, Integer>();
-        h.put("a", 3);
-        h.put("b", 2);
-        h.put("c", 2);
-        h.put("c", 1);
-        h.put("c", 1);
+        h.put("a", 5);
+        h.put("b", 4);
+        h.put("c", 3);
+        h.put("d", 2);
+        h.put("e", 1);
         for (String str : h.keySet())
         {
             System.out.println(str);
@@ -37,11 +37,12 @@ public class Test {
             String str = (String) it.next();
             replace.put(str,h.get(str));
         }
-        h.clear();
+
         for (String str : v)
         {
             System.out.println(str + " " + h.get(str));
         }
+        h.clear();
         h.putAll(replace);
 
         for (String str : h.keySet())

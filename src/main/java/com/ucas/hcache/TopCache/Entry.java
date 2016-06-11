@@ -5,14 +5,13 @@ public class Entry
     private String key;
     private String value;
     //private long long time_stamp;
-
-    public int cnt;
     public double hot;
 
-    public Entry(String k, String v)
+    public int cnt;
+
+
+    public Entry()
     {
-        this.key =k;
-        this.value = v;
         this.cnt =0;
         this.hot =0;
     }
@@ -24,8 +23,13 @@ public class Entry
     {
         return value;
     }
-    public double gethot()
+
+    public void setValue(String val)
     {
-        return hot;
+        this.value = val;
+    }
+    public void setKey(String key)
+    {
+        this.key = key;
     }
 }
