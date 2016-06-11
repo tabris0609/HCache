@@ -19,6 +19,10 @@ public class TopKCache {
     private double alpha = 0.2;      //confirm by test
     private double Top_K_threshold;  //confirm by test
 
+/***************** LRU replacement algorithm ********************/
+    private LinkedList<Entry> LRUList = new LinkedList<Entry>();
+/************************** The end *****************************/
+
     /**
      *configure cache size
      * Replacement scope of cache
@@ -31,7 +35,7 @@ public class TopKCache {
         this.cachesize = confSize;
         this.currentSize = 0;
         this.Top_K_threshold = threshold;
-        nodes = new Hashtable<String,Entry>();
+        nodes = new Hashtable<String,Entry>(confSize);
         if(strategy.equals("lru"))
         {
             lru =true;
@@ -43,6 +47,13 @@ public class TopKCache {
             lru =false;
         }
     }
+/***************** LRU replacement algorithm ********************/
+    private void lru_get(Entry cur)
+    {
+
+    }
+/************************** The end *****************************/
+
     /**
      * hot=alpha*cnt/countPeriod+(1-alpha)*hot
      *
@@ -120,12 +131,6 @@ public class TopKCache {
             hot_update_grade();
         }
     }
-
-    private void lru_update_grade()
-    {
-
-    }
-
     /**
      *
      * @param key
@@ -142,7 +147,7 @@ public class TopKCache {
             }
             else
             {
-                lru_update_grade();
+                lru_get(cur);
             }
             return cur.getValue();
         }
