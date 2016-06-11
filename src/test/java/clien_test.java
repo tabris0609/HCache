@@ -1,5 +1,3 @@
-package com.ucas.hcache;
-
 import com.ucas.hcache.HController.HController;
 import junit.framework.TestCase;
 

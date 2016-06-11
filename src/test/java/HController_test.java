@@ -1,6 +1,3 @@
-package com.ucas.hcache;
-
-
 import com.ucas.hcache.HController.HController;
 
 import java.io.IOException;

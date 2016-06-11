@@ -1,5 +1,3 @@
-package com.ucas.hcache;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
