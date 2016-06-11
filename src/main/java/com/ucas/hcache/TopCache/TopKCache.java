@@ -13,11 +13,19 @@ public class TopKCache {
     private int currentSize;
     private boolean lru ;
     public boolean hot ;
-    private int countPeriod = 5;     //confirm by test
-    private double alpha = 0.2;      //confirm by test
     private int period = 0;
-    private double Top_K_threshold;
 
+    private int countPeriod = 50;     //confirm by test
+    private double alpha = 0.2;      //confirm by test
+    private double Top_K_threshold;  //confirm by test
+
+    /**
+     *configure cache size
+     * Replacement scope of cache
+     * @param confSize
+     * @param threshold
+     * @param strategy
+     */
     public TopKCache(int confSize,double threshold,String strategy)
     {
         this.cachesize = confSize;
@@ -63,6 +71,9 @@ public class TopKCache {
             System.out.println(str);
         }*/
         List<String> v = new ArrayList<String>(nodes.keySet());
+        /**
+         * From big to small sort
+         */
         Collections.sort(v,new Comparator<String>()
         {
             public int compare(String arg0,String arg1)
@@ -88,11 +99,13 @@ public class TopKCache {
         nodes.putAll(replace);
 
         //System.out.println(str + " " + h.get(str));
-
     }
 
     /**
-     *
+     * by get()
+     * Compute global period compare to countPeriod
+     * if period > countPeriod
+     * calling Heat value replacement algorithm
      * @param cur
      */
     private void hot_update_cnt(Entry cur)
@@ -102,6 +115,7 @@ public class TopKCache {
         nodes.put(cur.getKey(),cur);
         if(period >= countPeriod)
         {
+            /**  Heat value replacement algorithm  **/
             period =0;
             hot_update_grade();
         }
@@ -179,13 +193,11 @@ public class TopKCache {
     }
 
     /**
-     *
+     * clear cache
      */
     public void clear()
     {
         nodes.clear();
     }
-
-
 
 }
