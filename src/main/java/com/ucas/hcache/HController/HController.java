@@ -37,7 +37,9 @@ public class HController {
         }
 
     }
-
+    public  void  createTable(String tableName,String column_family[]) throws IOException {
+        TableOperator.createTable(tableName,column_family);
+    }
     public void put(String tableName,String row_key, String column_family,String column_key,String value){
         if(is_local_cache)
         {
@@ -69,6 +71,12 @@ public class HController {
         String value = null;
         try {
             value = TableOperator.getData(tableName,row_key,column_family,column_key);
+            if(is_local_cache){
+                topkcache.set(key,value);
+            }
+            if(is_memcached){
+                memcache.set(key,value,1000);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
