@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Properties;
 
 import com.ucas.hcache.memcached.MemCached;
-
 // import package write or read .
 /**
  * Created by liujingkun on 16/6/10.
