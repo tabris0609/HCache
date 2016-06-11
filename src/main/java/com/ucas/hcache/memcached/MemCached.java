@@ -1,7 +1,7 @@
 package com.ucas.hcache.memcached;
 /*
 * @author: wjf
-* @version: 2016年6月10日 上午11:01:14
+* @version: 2016骞�6鏈�10鏃� 涓婂�?11:01:14
 */
 
 import java.io.IOException;
@@ -27,10 +27,10 @@ public class MemCached {
 			e.printStackTrace();
 		}
 	}
-	public void set(String key,String value,int exp) {
-
+	public boolean set(String key,String value,int exp) {
+		boolean flag=false;
 		try {
-			mc.add(key, exp, value);
+			flag=mc.add(key, exp, value);
 		} catch (TimeoutException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -38,6 +38,7 @@ public class MemCached {
 		} catch (MemcachedException e) {
 			e.printStackTrace();
 		}
+		return flag;
 	}
 	public String get(String key){
 		String value=null;
@@ -53,7 +54,7 @@ public class MemCached {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return value;
 	}
 	public  boolean delete(String key){
 		boolean flag=false;
@@ -72,10 +73,10 @@ public class MemCached {
 		}
 		return obj != null;
 	}
-	public static void main(String[] args) throws TimeoutException,  MemcachedException, InterruptedException{
-		mc.add("name", 100, "wangjianfei");
-		System.out.println(mc.get("name"));
-	}
+//	public static void main(String[] args) throws TimeoutException,  MemcachedException, InterruptedException{
+//		mc.add("name", 100, "wangjianfei");
+//		System.out.println(mc.get("name"));
+//	}
 	
 
 }

@@ -1,2 +1,4 @@
 .idea/
 HCache.iml
+/bin/
+/target/
