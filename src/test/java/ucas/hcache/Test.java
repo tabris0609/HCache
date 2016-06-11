@@ -44,7 +44,8 @@ public class Test {
         {
             System.out.println(str + " " + h.get(str));
         }
-        h = replace;
+        h.putAll(replace);
+
         for (String str : h.keySet())
         {
             System.out.println(str);
