@@ -24,4 +24,8 @@ public class Entry
     {
         return value;
     }
+    public double gethot()
+    {
+        return hot;
+    }
 }
