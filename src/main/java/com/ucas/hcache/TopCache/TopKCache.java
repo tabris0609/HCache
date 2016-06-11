@@ -34,10 +34,10 @@ public class TopKCache {
             hot = true;
             lru =false;
         }
-
     }
     /**
      * hot=alpha*cnt/countPeriod+(1-alpha)*hot
+     *
      */
     private void hot_update_grade()
     {
@@ -46,12 +46,16 @@ public class TopKCache {
         while(iterator.hasNext()){
             String str =iterator.next();
             Entry update = nodes.get(str);
-            update.hot = alpha*update.cnt/countPeriod+(1-alpha)*update.hot;
+            update.hot = alpha*update.cnt/countPeriod+(1-alpha)*(update.hot);
             update.cnt = 0;
             nodes.put(str,update);
         }
+        TopK_Replace_Cache();
     }
 
+    /**
+     * According Top_K_threshold update cache
+     */
     private  void TopK_Replace_Cache()
     {
         /*for (String str : nodes.keySet())
@@ -65,7 +69,7 @@ public class TopKCache {
             {
                 Entry update0 = nodes.get(arg0);
                 Entry update1 = nodes.get(arg1);
-                double v1 = update1.gethot() - (update0.gethot());
+                double v1 = update1.hot - update0.hot;
                 int ret =(int)v1;
                 return ret;
             }
@@ -81,7 +85,7 @@ public class TopKCache {
             replace.put(str,nodes.get(str));
         }
         nodes.clear();
-        nodes = replace;
+        nodes.putAll(replace);
 
         //System.out.println(str + " " + h.get(str));
 
@@ -108,6 +112,11 @@ public class TopKCache {
 
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public String get(String key)
     {
         Entry cur = nodes.get(key);
@@ -126,26 +135,56 @@ public class TopKCache {
         else
             return null;
     }
+
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void set(String key,String value)
     {
-        Entry entry;
+
         if(nodes.size()>= cachesize)
         {
-
-            //remove()
+            Entry entry = new Entry();
+            TopK_Replace_Cache();
+            entry.setKey(key);
+            entry.setValue(value);
+            nodes.put(key,entry);
         }
         else
         {
-            entry =new Entry(key,value);
+            Entry entry = new Entry();
+            entry.setKey(key);
+            entry.setValue(value);
             nodes.put(key,entry);
         }
     }
 
-    public void remove()
-    {}
+    /**
+     *
+     * @param key
+     */
+    public void remove(String key)
+    {
+        boolean contains = nodes.containsKey(key);
+        if(contains)
+        {
+            nodes.remove(key);
+        }
+        else
+        {
+            System.out.print("This KV isn't exist!");
+        }
+    }
 
+    /**
+     *
+     */
     public void clear()
-    {}
+    {
+        nodes.clear();
+    }
 
 
 
