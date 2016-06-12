@@ -33,14 +33,15 @@ public class HController {
         if (properties.getProperty("strategy").toLowerCase().contentEquals("lru")) {
             this.strategy = "lru";
         }
-
+        double threshold = Double.parseDouble(properties.getProperty("threshold"));
+        int cache_size =Integer.parseInt(properties.getProperty("cacheSize"));
         System.out.println(this.is_local_cache);
         System.out.println(this.is_memcached);
         if (this.is_memcached) {
             this.memcache = new MemCached();
         }
         if (this.is_local_cache) {
-            this.topkcache = new TopKCache(2000, 0.4, "hot");
+            this.topkcache = new TopKCache(cache_size, threshold, strategy);
         }
 
     }
@@ -61,7 +62,7 @@ public class HController {
         }
         if(is_memcached)
         {
-//            memcache.delete(tableName+row_key+column_family+column_key);
+            memcache.delete(tableName+row_key+column_family+column_key);
         }
         try {
             TableOperator.putData(tableName,row_key,column_family,column_key,value);
@@ -81,7 +82,6 @@ public class HController {
         if(is_memcached) {
             String str = memcache.get(key);
             if(str!=null)
-//            	System.out.println(str);
                 return str;
         }
         String value = null;
