@@ -16,6 +16,10 @@ public class TableOperator {
     private static HashMap<String, HTable> hTables = null;
     static {
         conf = HBaseConfiguration.create();
+        //conf.set("hbase.master", "172.17.100.16:60000")
+        //conf.set(HConstants.ZOOKEEPER_QUORUM, "172.17.100.16:2181");
+        conf.set("hbase.zookeeper.quorum", "hcache");
+        conf.set("hbase.zookeeper.property.clientPort", "2181");
         hTables = new HashMap<String, HTable>();
     }
 
