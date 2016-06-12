@@ -1,6 +1,5 @@
-package ucas.hcache;
-
 import com.ucas.hcache.HController.HController;
+import com.ucas.hcache.HController.TableOperator;
 import junit.framework.TestCase;
 
 /**
@@ -12,12 +11,10 @@ public class clien_test extends TestCase{
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp();
-        client = new HController();
-
+        //TableOperator.createTable("abc", new String[]{"cf"});
     }
 
     public void test(){
-        System.out.println("abc");
+        System.out.println("abdd");
     }
 }

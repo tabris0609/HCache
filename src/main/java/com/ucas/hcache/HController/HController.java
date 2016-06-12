@@ -2,10 +2,12 @@ package com.ucas.hcache.HController;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
+import com.ucas.hcache.TopCache.TopKCache;
 import com.ucas.hcache.memcached.MemCached;
-// import package write or read .
+
 /**
  * Created by liujingkun on 16/6/10.
  */
@@ -18,53 +20,70 @@ public class HController {
     private boolean is_memcached = false;
     private boolean is_local_cache = false;
     private MemCached memcache;
-    //private cache local;
-    private String tableName;
+    private TopKCache topkcache;
+
     public HController() throws IOException{
-        FileInputStream in = new FileInputStream("conf/HCache.conf");
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("HCache.conf");
         Properties properties = new Properties();
         properties.load(in);
 
         this.is_memcached = "on".equals(properties.getProperty("memcached_cache"));
         this.is_local_cache = "on".equals(properties.getProperty("local_cache"));
-
+        System.out.println(this.is_local_cache);
+        System.out.println(this.is_memcached);
         if (this.is_memcached) {
             this.memcache = new MemCached();
         }
         if (this.is_local_cache) {
-            //this.local = new Cache();
+            this.topkcache = new TopKCache(2000, 0.4, "hot");
         }
 
     }
-
-    public void put(String key, String value){
-//        if(local_cache)
-//        {
-//             memcache.delete(key);
-//        }
-//        if(memecached)
-//        {
-//            local.delete(key);
-//        }
-//        write()
+    public  void  createTable(String tableName,String column_family[]) throws IOException {
+        TableOperator.createTable(tableName,column_family);
+    }
+    public void put(String tableName,String row_key, String column_family,String column_key,String value){
+        if(is_local_cache)
+        {
+             topkcache.remove(tableName+row_key+column_family+column_key);
+        }
+        if(is_memcached)
+        {
+//            memcache.delete(tableName+row_key+column_family+column_key);
+        }
+        try {
+            TableOperator.putData(tableName,row_key,column_family,column_key,value);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public String get(String key){
-//        if(local_cache&&local.cotain(key)) {
-//            return local_cache.get(tableName,key);
-//        }
-//        if(memecached&&memcache.contain(key)) {
-//            return memcache.get(key);
-//        }
-//
-//        String value = read(tableName,key);
-//        if(local_cache)
-//            local.set(key,value);
-//
-//        if(memecached)
-//            memcache.set(key,value,1000);
-//
-//        return value;
-        return null;
+    public String get(String tableName,String row_key, String column_family,String column_key){
+        String key =tableName+row_key+column_family+column_key;
+        if(is_local_cache) {
+            String str = topkcache.get(key);
+            if(str!=null)
+            	System.out.println(str);
+                return  str;
+        }
+        if(is_memcached) {
+            String str = memcache.get(key);
+            if(str!=null)
+//            	System.out.println(str);
+                return str;
+        }
+        String value = null;
+        try {
+            value = TableOperator.getData(tableName,row_key,column_family,column_key);
+            if(is_local_cache){
+                topkcache.set(key,value);
+            }
+            if(is_memcached){
+                memcache.set(key,value,1000);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  value;
     }
 }

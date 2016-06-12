@@ -2,3 +2,8 @@
 HCache.iml
 /bin/
 /target/
+.settings
+.classpath
+.project
+out/
+.DS_Store
