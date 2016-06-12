@@ -16,6 +16,7 @@ import com.ucas.hcache.memcached.MemCached;
    modify by hcs on 16/6/10
 */
 
+
 public class HController {
     private boolean is_memcached = false;
     private boolean is_local_cache = false;
@@ -23,6 +24,10 @@ public class HController {
     private MemCached memcache;
     private TopKCache topkcache;
 
+    /**
+     *
+     * @throws IOException
+     */
     public HController() throws IOException{
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("HCache.conf");
         Properties properties = new Properties();
@@ -35,8 +40,8 @@ public class HController {
         }
         double threshold = Double.parseDouble(properties.getProperty("threshold"));
         int cache_size =Integer.parseInt(properties.getProperty("cacheSize"));
-        System.out.println(this.is_local_cache);
-        System.out.println(this.is_memcached);
+        /*System.out.println(this.is_local_cache);
+        System.out.println(this.is_memcached);*/
         if (this.is_memcached) {
             this.memcache = new MemCached();
         }
@@ -48,9 +53,9 @@ public class HController {
 
     /**
      *
-     * @param tableName
-     * @param column_family
-     * @throws IOException
+     * @param tableName table name
+     * @param column_family column family
+     * @throws IOException table name error or column family error
      */
     public  void  createTable(String tableName,String column_family[]) throws IOException {
         TableOperator.createTable(tableName,column_family);
@@ -71,12 +76,20 @@ public class HController {
         }
     }
 
+    /**
+     *
+     * @param tableName table name
+     * @param row_key row key
+     * @param column_family column family
+     * @param column_key column key
+     * @return value
+     */
     public String get(String tableName,String row_key, String column_family,String column_key){
         String key =tableName+row_key+column_family+column_key;
         if(is_local_cache) {
             String str = topkcache.get(key);
             if(str!=null)
-            	System.out.println(str);
+//            	System.out.println(str);
                 return  str;
         }
         if(is_memcached) {
