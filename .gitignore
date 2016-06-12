@@ -7,3 +7,4 @@ HCache.iml
 .project
 out/
 .DS_Store
+conf/

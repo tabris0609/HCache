@@ -19,6 +19,7 @@ import com.ucas.hcache.memcached.MemCached;
 public class HController {
     private boolean is_memcached = false;
     private boolean is_local_cache = false;
+    private String strategy = "hot";
     private MemCached memcache;
     private TopKCache topkcache;
 
@@ -29,6 +30,10 @@ public class HController {
 
         this.is_memcached = "on".equals(properties.getProperty("memcached_cache"));
         this.is_local_cache = "on".equals(properties.getProperty("local_cache"));
+        if (properties.getProperty("strategy").toLowerCase().contentEquals("lru")) {
+            this.strategy = "lru";
+        }
+
         System.out.println(this.is_local_cache);
         System.out.println(this.is_memcached);
         if (this.is_memcached) {
