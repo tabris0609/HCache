@@ -29,7 +29,8 @@ public class HController {
 
         this.is_memcached = "on".equals(properties.getProperty("memcached_cache"));
         this.is_local_cache = "on".equals(properties.getProperty("local_cache"));
-
+        System.out.println(this.is_local_cache);
+        System.out.println(this.is_memcached);
         if (this.is_memcached) {
             this.memcache = new MemCached();
         }
@@ -62,11 +63,13 @@ public class HController {
         if(is_local_cache) {
             String str = topkcache.get(key);
             if(str!=null)
+            	System.out.println(str);
                 return  str;
         }
         if(is_memcached) {
             String str = memcache.get(key);
             if(str!=null)
+//            	System.out.println(str);
                 return str;
         }
         String value = null;

@@ -239,7 +239,7 @@ public class TopKCache {
         }
         else
         {
-            System.out.print("This KV isn't exist!");
+//            System.out.print("This KV isn't exist!");
         }
     }
 
