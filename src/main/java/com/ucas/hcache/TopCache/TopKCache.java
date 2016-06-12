@@ -20,7 +20,7 @@ public class TopKCache {
     private double Top_K_threshold;  //confirm by test
 
 /***************** LRU replacement algorithm ********************/
-    private LinkedList<Entry> LRUList = new LinkedList<Entry>();
+    private LinkedList<Entry> LRUList ;
 /************************** The end *****************************/
 
     /**
@@ -36,6 +36,9 @@ public class TopKCache {
         this.currentSize = 0;
         this.Top_K_threshold = threshold;
         nodes = new Hashtable<String,Entry>(confSize);
+/***************** LRU replacement algorithm ********************/
+        LRUList = new LinkedList<Entry>();
+/************************** The end *****************************/
         if(strategy.equals("lru"))
         {
             lru =true;
@@ -50,7 +53,28 @@ public class TopKCache {
 /***************** LRU replacement algorithm ********************/
     private void lru_get(Entry cur)
     {
+        System.out.print("Return the LRU cache value");
+    }
 
+    private void lru_set(Entry temp)
+    {
+        int i = LRUList.size();
+        if(i>cachesize)
+        {
+            LRUList.remove(temp);
+            LRUList.removeLast();
+            LRUList.addFirst(temp);
+        }
+        else
+        {
+            LRUList.remove(temp);
+            LRUList.addFirst(temp);
+        }
+    }
+
+    private void lru_remove(Entry entry)
+    {
+        LRUList.remove(entry);
     }
 /************************** The end *****************************/
 
@@ -148,6 +172,7 @@ public class TopKCache {
             else
             {
                 lru_get(cur);
+                System.out.print("LRU get()");
             }
             return cur.getValue();
         }
@@ -166,7 +191,18 @@ public class TopKCache {
         if(nodes.size()>= cachesize)
         {
             Entry entry = new Entry();
-            TopK_Replace_Cache();
+            if(hot)
+            {
+                TopK_Replace_Cache();
+            }
+            else
+            {
+                Entry temp = new Entry();
+                temp.setKey(key);
+                temp.setValue(value);
+                lru_set(temp);
+                System.out.print("LRU insert");
+            }
             entry.setKey(key);
             entry.setValue(value);
             nodes.put(key,entry);
@@ -177,6 +213,11 @@ public class TopKCache {
             entry.setKey(key);
             entry.setValue(value);
             nodes.put(key,entry);
+            if (lru)
+            {
+                lru_set(entry);
+                System.out.print("LRU insert");
+            }
         }
     }
 
@@ -189,6 +230,11 @@ public class TopKCache {
         boolean contains = nodes.containsKey(key);
         if(contains)
         {
+            if(lru)
+            {
+                Entry entry = nodes.get(key);
+                lru_remove(entry);
+            }
             nodes.remove(key);
         }
         else
@@ -203,6 +249,10 @@ public class TopKCache {
     public void clear()
     {
         nodes.clear();
+        if(lru)
+        {
+            LRUList.clear();
+        }
     }
 
 }
