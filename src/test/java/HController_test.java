@@ -11,7 +11,9 @@ public class HController_test {
         hController.createTable("abc", new String[]{"cf"});
         hController.put("abc","row","cf","ck","value");
         String res = hController.get("abc","row","cf","ck");
-        System.out.print(res);
+        String data = hController.get("abc","row","cf","ck");
+        System.out.println(res);
+        System.out.println("cache: "+data);
 
     }
 }

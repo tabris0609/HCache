@@ -38,6 +38,13 @@ public class HController {
         }
 
     }
+
+    /**
+     *
+     * @param tableName
+     * @param column_family
+     * @throws IOException
+     */
     public  void  createTable(String tableName,String column_family[]) throws IOException {
         TableOperator.createTable(tableName,column_family);
     }
