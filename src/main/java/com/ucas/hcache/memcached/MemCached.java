@@ -13,7 +13,7 @@ import net.rubyeye.xmemcached.XMemcachedClientBuilder;
 import net.rubyeye.xmemcached.exception.MemcachedException;
 
 public class MemCached {
-	private static final String ip="192.168.26.129";
+	private static final String ip="192.168.26.xxx";
 	private static final int port=12000;
 	private static MemcachedClientBuilder mcb=null;
 	private static MemcachedClient mc=null;
