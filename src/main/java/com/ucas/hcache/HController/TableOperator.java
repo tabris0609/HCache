@@ -14,7 +14,6 @@ import java.util.HashMap;
 public class TableOperator {
     private static Configuration conf = null;
     private static HashMap<String, HTable> hTables = null;
-
     static {
         conf = HBaseConfiguration.create();
         hTables = new HashMap<String, HTable>();

@@ -12,13 +12,16 @@ public class Test {
         final Hashtable<String, Integer> h = new Hashtable<String, Integer>();
         h.put("a", 5);
         h.put("b", 4);
-        h.put("c", 3);
+        h.put("b", 3);
         h.put("d", 2);
         h.put("e", 1);
+        int numkey = h.size();
         for (String str : h.keySet())
         {
-            System.out.println(str);
+            System.out.println(str+" "+h.get(str));
         }
+        System.out.print(numkey);
+        System.out.println( );
         List<String> v = new ArrayList<String>(h.keySet());
         Collections.sort(v,new Comparator<String>()
         {

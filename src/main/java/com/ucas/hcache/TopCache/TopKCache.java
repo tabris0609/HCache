@@ -19,6 +19,10 @@ public class TopKCache {
     private double alpha = 0.2;      //confirm by test
     private double Top_K_threshold;  //confirm by test
 
+/***************** LRU replacement algorithm ********************/
+    private LinkedList<Entry> LRUList ;
+/************************** The end *****************************/
+
     /**
      *configure cache size
      * Replacement scope of cache
@@ -31,7 +35,10 @@ public class TopKCache {
         this.cachesize = confSize;
         this.currentSize = 0;
         this.Top_K_threshold = threshold;
-        nodes = new Hashtable<String,Entry>();
+        nodes = new Hashtable<String,Entry>(confSize);
+/***************** LRU replacement algorithm ********************/
+        LRUList = new LinkedList<Entry>();
+/************************** The end *****************************/
         if(strategy.equals("lru"))
         {
             lru =true;
@@ -43,6 +50,34 @@ public class TopKCache {
             lru =false;
         }
     }
+/***************** LRU replacement algorithm ********************/
+    private void lru_get(Entry cur)
+    {
+        System.out.print("Return the LRU cache value");
+    }
+
+    private void lru_set(Entry temp)
+    {
+        int i = LRUList.size();
+        if(i>cachesize)
+        {
+            LRUList.remove(temp);
+            LRUList.removeLast();
+            LRUList.addFirst(temp);
+        }
+        else
+        {
+            LRUList.remove(temp);
+            LRUList.addFirst(temp);
+        }
+    }
+
+    private void lru_remove(Entry entry)
+    {
+        LRUList.remove(entry);
+    }
+/************************** The end *****************************/
+
     /**
      * hot=alpha*cnt/countPeriod+(1-alpha)*hot
      *
@@ -120,12 +155,6 @@ public class TopKCache {
             hot_update_grade();
         }
     }
-
-    private void lru_update_grade()
-    {
-
-    }
-
     /**
      *
      * @param key
@@ -142,7 +171,8 @@ public class TopKCache {
             }
             else
             {
-                lru_update_grade();
+                lru_get(cur);
+                System.out.print("LRU get()");
             }
             return cur.getValue();
         }
@@ -161,7 +191,18 @@ public class TopKCache {
         if(nodes.size()>= cachesize)
         {
             Entry entry = new Entry();
-            TopK_Replace_Cache();
+            if(hot)
+            {
+                TopK_Replace_Cache();
+            }
+            else
+            {
+                Entry temp = new Entry();
+                temp.setKey(key);
+                temp.setValue(value);
+                lru_set(temp);
+                System.out.print("LRU insert");
+            }
             entry.setKey(key);
             entry.setValue(value);
             nodes.put(key,entry);
@@ -172,6 +213,11 @@ public class TopKCache {
             entry.setKey(key);
             entry.setValue(value);
             nodes.put(key,entry);
+            if (lru)
+            {
+                lru_set(entry);
+                System.out.print("LRU insert");
+            }
         }
     }
 
@@ -184,11 +230,16 @@ public class TopKCache {
         boolean contains = nodes.containsKey(key);
         if(contains)
         {
+            if(lru)
+            {
+                Entry entry = nodes.get(key);
+                lru_remove(entry);
+            }
             nodes.remove(key);
         }
         else
         {
-            System.out.print("This KV isn't exist!");
+//            System.out.print("This KV isn't exist!");
         }
     }
 
@@ -198,6 +249,10 @@ public class TopKCache {
     public void clear()
     {
         nodes.clear();
+        if(lru)
+        {
+            LRUList.clear();
+        }
     }
 
 }
