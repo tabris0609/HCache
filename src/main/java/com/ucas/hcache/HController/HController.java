@@ -12,9 +12,9 @@ import com.ucas.hcache.memcached.MemCached;
  * Created by liujingkun on 16/6/10.
  */
 
-/*
-   modify by hcs on 16/6/10
-*/
+/**
+ * modify by hcs on 16/6/10
+ */
 
 
 public class HController {
@@ -110,5 +110,31 @@ public class HController {
             e.printStackTrace();
         }
         return  value;
+    }
+
+    /**
+     *  use for test
+     *  if could get from local cache return 1
+     *                    memcached retrun 2
+     *                    hbase return 3
+     * @param tableName
+     * @param row_key
+     * @param column_family
+     * @param column_key
+     * @return
+     */
+    public int test_get(String tableName,String row_key, String column_family,String column_key){
+        String key =tableName+row_key+column_family+column_key;
+        if(is_local_cache) {
+            String str = topkcache.get(key);
+            if(str!=null)
+                return  1;
+        }
+        if(is_memcached) {
+            String str = memcache.get(key);
+            if(str!=null)
+                return 2;
+        }
+        return  3;
     }
 }
