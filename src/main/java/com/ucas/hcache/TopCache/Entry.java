@@ -1,9 +1,12 @@
 package com.ucas.hcache.TopCache;
 
+import java.util.HashMap;
+
 public class Entry
 {
     private String key;
-    private String value;
+    private HashMap<String,String> value = new HashMap<String,String>();
+    //private String value;
     //private long long time_stamp;
     public double hot;
 
@@ -29,7 +32,7 @@ public class Entry
      *
      * @return
      */
-    public String getValue()
+    public HashMap getValue()
     {
         return value;
     }
@@ -38,7 +41,7 @@ public class Entry
      *
      * @param val
      */
-    public void setValue(String val)
+    public void setValue(HashMap val)
     {
         this.value = val;
     }

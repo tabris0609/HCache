@@ -160,7 +160,7 @@ public class TopKCache {
      * @param key
      * @return
      */
-    public String get(String key)
+    public HashMap get(String key)
     {
         Entry cur = nodes.get(key);
         if(nodes.contains(key))
@@ -185,7 +185,7 @@ public class TopKCache {
      * @param key
      * @param value
      */
-    public void set(String key,String value)
+    public void set(String key,HashMap value)
     {
 
         if(nodes.size()>= cachesize)
