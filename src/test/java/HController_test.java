@@ -1,4 +1,5 @@
 import com.ucas.hcache.HController.HController;
+import com.ucas.hcache.memcached.MemCachedHash;
 
 import java.io.IOException;
 import java.util.*;
@@ -11,7 +12,7 @@ public class HController_test {
         HController hController =new HController();
         HashSet<String> set = null;
         hController.createTable("abc", new String[]{"cf"});
-        hController.put("abc","row","cf","ck","value");
+        hController.put("abc","row","cf","ck","vale");
         HashMap<String, String> res = hController.get("abc","row","cf",set);
         //HashMap<String, String> map = hController.get("usertable","test","f1", set);
 
@@ -22,6 +23,6 @@ public class HController_test {
         }
         //System.out.println(res);
         //System.out.println("cache: "+data);
-
+        MemCachedHash.halt();
     }
 }

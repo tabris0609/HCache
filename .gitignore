@@ -5,7 +5,6 @@ HCache.iml
 .settings
 .classpath
 .project
-out/
 .DS_Store
 conf/
 ycsb/

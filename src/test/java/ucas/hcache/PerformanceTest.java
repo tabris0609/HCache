@@ -8,10 +8,6 @@ import org.junit.Test;
 
 import com.ucas.hcache.HController.HController;
 
-/*
-* @author: wjf
-* @version: 2016年6月11日 下午2:04:09
-*/
 
 public class PerformanceTest {
 	private List<Integer> data1=new ArrayList<Integer>();
@@ -41,6 +37,7 @@ public class PerformanceTest {
         hController.createTable("abc", new String[]{"cf"});
         for(int i=0;i<data.size();i++){
         	hController.put("abc", "row", "cf",String.valueOf(data.get(i)), String.valueOf(data.get(i)));
+			System.out.println(i);
         }
         long start=System.currentTimeMillis();
 //        System.out.println("with memcached and local");

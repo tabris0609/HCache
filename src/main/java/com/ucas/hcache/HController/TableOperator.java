@@ -119,6 +119,7 @@ public class TableOperator {
         get.addFamily(columnFamily.getBytes());
         Result result = null;
 
+        get.setCacheBlocks(false);
         result = hTable.get(get);
 
         for (Cell cell: result.rawCells()){

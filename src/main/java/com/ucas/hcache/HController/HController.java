@@ -1,5 +1,6 @@
 package com.ucas.hcache.HController;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +32,8 @@ public class HController {
      * @throws IOException
      */
     public HController() throws IOException{
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("HCache.conf");
+        //InputStream in = this.getClass().getClassLoader().getResourceAsStream("HCache.conf");
+        InputStream in = new BufferedInputStream(new FileInputStream("/Users/liujingkun/HCache.conf"));
         Properties properties = new Properties();
         properties.load(in);
 

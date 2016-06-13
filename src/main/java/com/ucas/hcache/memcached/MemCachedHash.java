@@ -70,4 +70,11 @@ public class MemCachedHash {
         }
         return flag;
     }
+    public static void halt(){
+        try{
+            mc.shutdown();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
