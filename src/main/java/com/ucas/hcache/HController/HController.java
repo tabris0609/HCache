@@ -90,7 +90,6 @@ public class HController {
         if(is_local_cache) {
             String str = topkcache.get(key);
             if(str!=null)
-//            	System.out.println(str);
                 return  str;
         }
         if(is_memcached) {
@@ -115,6 +114,15 @@ public class HController {
         }
         return  value;
     }
+
+    /**
+     * reconstruction
+     * @param tableName tableName
+     * @param row_key row key
+     * @param column_family column family
+     * @param column_key key set
+     * @return hashMap <column_key,value>
+     */
     public HashMap<String,String> get(String tableName, String row_key, String column_family, Set<String> column_key){
         String key =tableName+row_key+column_family;
         HashMap<String,String> ret =new HashMap<String, String>();
