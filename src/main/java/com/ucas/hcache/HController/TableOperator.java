@@ -7,6 +7,7 @@ import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by liujingkun on 2016/6/10.
@@ -106,14 +107,23 @@ public class TableOperator {
      * @return String value
      * @throws IOException
      */
-    public static String getData(String tableName, String row_key,
-                               String columnFamily, String col_key) throws IOException {
+    public static HashMap<String, String> getData(String tableName, String row_key,
+                                 String columnFamily, Set<String> col_keys) throws IOException {
         HTable hTable = null;
+        HashMap<String, String> map = null;
         hTable = get_hTable(tableName);
         Get get = new Get(row_key.getBytes());
-        get.addColumn(columnFamily.getBytes(), col_key.getBytes());
+        get.addFamily(columnFamily.getBytes());
+        for (String col_key: col_keys) {
+            get.addColumn(columnFamily.getBytes(), col_key.getBytes());
+        }
         Result result = hTable.get(get);
-        return new String(result.getValue(columnFamily.getBytes(), col_key.getBytes()));
+        for (Cell cell: result.rawCells()){
+            map.put(CellUtil.cloneFamily(cell).toString(),
+                    CellUtil.cloneValue(cell).toString()
+            );
+        }
+        return map;
     }
 
     /**

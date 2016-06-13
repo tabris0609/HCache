@@ -8,3 +8,4 @@ HCache.iml
 out/
 .DS_Store
 conf/
+ycsb/
