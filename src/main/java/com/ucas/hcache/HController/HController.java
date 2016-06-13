@@ -88,9 +88,9 @@ public class HController {
     public String get(String tableName,String row_key, String column_family,String column_key){
         String key =tableName+row_key+column_family;
         if(is_local_cache) {
-            String str = topkcache.get(key);
-            if(str!=null)
-                return  str;
+            HashMap<String,String> ret = topkcache.get(key);
+            if(ret!=null)
+                return  ret.get(column_key);
         }
         if(is_memcached) {
             String str = memcache.get(key);
@@ -102,7 +102,7 @@ public class HController {
             HashMap<String,String> cur_map= TableOperator.getData(tableName,row_key,column_family);
             value = cur_map.get(column_key);
             if(is_local_cache){
-                topkcache.set(key,value);
+                topkcache.set(key,cur_map);
             }
             if(is_memcached){
 //                memcache.set(key,cur_map,1000);
@@ -112,9 +112,16 @@ public class HController {
         }
         return  value;
     }
+
+    /**
+     *  precess column key set
+     * @param ret get from local cache,memcached or hbase
+     * @param column_keys get from user interface
+     * @return processed hashmap
+     */
     public HashMap<String,String> judgeColumn(HashMap<String,String> ret,Set<String>column_keys)
     {
-        if (!column_keys.isEmpty()){
+        if (column_keys!=null && !column_keys.isEmpty()){
             Iterator<String> it =ret.keySet().iterator();
             while(it.hasNext())
             {
@@ -138,7 +145,7 @@ public class HController {
         String key =tableName+row_key+column_family;
         HashMap<String,String> ret =null;
         if(is_local_cache) {
-//            ret = topkcache.get(key);
+            ret = topkcache.get(key);
             if(ret!=null) {
                 return judgeColumn(ret,column_keys);
             }
@@ -153,7 +160,7 @@ public class HController {
             ret = TableOperator.getData(tableName,row_key,column_family);
             Iterator<String> it =ret.keySet().iterator();
             if (is_local_cache) {
-//                topkcache.set(key, ret);
+                topkcache.set(key, ret);
             }
             if (is_memcached) {
 //                memcache.set(key, ret, 1000);
@@ -179,7 +186,7 @@ public class HController {
     public int test_get(String tableName,String row_key, String column_family,String column_key){
         String key =tableName+row_key+column_family+column_key;
         if(is_local_cache) {
-            String str = topkcache.get(key);
+            HashMap<String,String> str = topkcache.get(key);
             if(str!=null)
                 return  1;
         }
