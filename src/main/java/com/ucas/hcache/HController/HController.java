@@ -3,8 +3,9 @@ package com.ucas.hcache.HController;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.*;
 
+import com.google.protobuf.ByteString;
 import com.ucas.hcache.TopCache.TopKCache;
 import com.ucas.hcache.memcached.MemCached;
 
@@ -99,7 +100,10 @@ public class HController {
         }
         String value = null;
         try {
-            value = TableOperator.getData(tableName,row_key,column_family,column_key);
+            HashSet<String> s = new HashSet<String>();
+            s.add(column_key);
+            HashMap<String,String> cur_map= TableOperator.getData(tableName,row_key,column_family,s);
+            value = cur_map.get(column_key);
             if(is_local_cache){
                 topkcache.set(key,value);
             }
@@ -110,6 +114,54 @@ public class HController {
             e.printStackTrace();
         }
         return  value;
+    }
+    public HashMap<String,String> get(String tableName, String row_key, String column_family, Set<String> column_key){
+        String key =tableName+row_key+column_family;
+        HashMap<String,String> ret =new HashMap<String, String>();
+        Set<String> column_key_set=column_key;
+        if(is_local_cache) {
+            for (String column_key1:column_key_set) {
+                String str = topkcache.get(key+column_key1);
+                if(str!=null)
+                {
+                    ret.put(column_key1,str);
+                    column_key_set.remove(column_key1);
+                }
+            }
+            if(column_key_set.size()==0) {
+                return ret;
+            }
+        }
+        if(is_memcached) {
+            for(String column_key1:column_key_set){
+                String str = memcache.get(key+column_key1);
+                if(str!=null){
+                    ret.put(column_key1,str);
+                    column_key_set.remove(column_key1);
+                }
+            }
+            if(column_key_set.size()==0)
+            {
+                return ret;
+            }
+        }
+        try {
+            HashMap<String,String> tem = TableOperator.getData(tableName,row_key,column_family,column_key_set);
+            Iterator<String> it =tem.keySet().iterator();
+            while(it.hasNext()) {
+                String value =it.next();
+                if (is_local_cache) {
+                    topkcache.set(key+value, tem.get(value));
+                }
+                if (is_memcached) {
+                    memcache.set(key+value, tem.get(value), 1000);
+                }
+                ret.put(value,tem.get(value));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  ret;
     }
 
     /**
