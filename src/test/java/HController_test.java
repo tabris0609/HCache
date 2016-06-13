@@ -1,9 +1,7 @@
 import com.ucas.hcache.HController.HController;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by hou on 2016/6/11.
@@ -11,13 +9,17 @@ import java.util.Set;
 public class HController_test {
     public static void main(String args[]) throws IOException {
         HController hController =new HController();
-        HashSet<String> set = new HashSet<String>();
-        set.add("");
-        //hController.createTable("abc", new String[]{"cf"});
-        //hController.put("abc","row","cf","ck","value");
-        //String res = hController.get("abc","row","cf","ck");
-        HashMap<String, String> map = hController.get("usertable","test","f1", set);
+        HashSet<String> set = null;
+        hController.createTable("abc", new String[]{"cf"});
+        hController.put("abc","row","cf","ck","value");
+        HashMap<String, String> res = hController.get("abc","row","cf",set);
+        //HashMap<String, String> map = hController.get("usertable","test","f1", set);
 
+        Iterator iter = res.entrySet().iterator();
+        while (iter.hasNext()){
+            Map.Entry entry = (Map.Entry) iter.next();
+            System.out.println(entry.getValue().toString());
+        }
         //System.out.println(res);
         //System.out.println("cache: "+data);
 

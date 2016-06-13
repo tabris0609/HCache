@@ -15,7 +15,7 @@ import java.util.concurrent.TimeoutException;
 
 
 public class MemCachedHash {
-    private static final String ip="192.168.26.xxx";
+    private static final String ip="172.17.100.16";
     private static final int port=12000;
     private static MemcachedClientBuilder mcb=null;
     private static MemcachedClient mc=null;
