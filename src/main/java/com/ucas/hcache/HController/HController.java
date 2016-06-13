@@ -144,6 +144,7 @@ public class HController {
             }
         }
         if(is_memcached) {
+//            ret = memcache.get(key);
             if(ret!=null){
                 return judgeColumn(ret,column_keys);
             }
