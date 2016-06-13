@@ -64,11 +64,11 @@ public class HController {
     public void put(String tableName,String row_key, String column_family,String column_key,String value){
         if(is_local_cache)
         {
-             topkcache.remove(tableName+row_key+column_family+column_key);
+             topkcache.remove(tableName+row_key+column_family);
         }
         if(is_memcached)
         {
-            memcache.delete(tableName+row_key+column_family+column_key);
+            memcache.delete(tableName+row_key+column_family);
         }
         try {
             TableOperator.putData(tableName,row_key,column_family,column_key,value);
@@ -86,7 +86,7 @@ public class HController {
      * @return value
      */
     public String get(String tableName,String row_key, String column_family,String column_key){
-        String key =tableName+row_key+column_family+column_key;
+        String key =tableName+row_key+column_family;
         if(is_local_cache) {
             String str = topkcache.get(key);
             if(str!=null)
@@ -99,15 +99,13 @@ public class HController {
         }
         String value = null;
         try {
-            HashSet<String> s = new HashSet<String>();
-            s.add(column_key);
-            HashMap<String,String> cur_map= TableOperator.getData(tableName,row_key,column_family,s);
+            HashMap<String,String> cur_map= TableOperator.getData(tableName,row_key,column_family);
             value = cur_map.get(column_key);
             if(is_local_cache){
                 topkcache.set(key,value);
             }
             if(is_memcached){
-                memcache.set(key,value,1000);
+//                memcache.set(key,cur_map,1000);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -120,51 +118,53 @@ public class HController {
      * @param tableName tableName
      * @param row_key row key
      * @param column_family column family
-     * @param column_key key set
+     * @param column_keys key set
      * @return hashMap <column_key,value>
      */
-    public HashMap<String,String> get(String tableName, String row_key, String column_family, Set<String> column_key){
+    public HashMap<String,String> get(String tableName, String row_key, String column_family, Set<String> column_keys){
         String key =tableName+row_key+column_family;
-        HashMap<String,String> ret =new HashMap<String, String>();
-        Set<String> column_key_set=column_key;
+        HashMap<String,String> ret =null;
         if(is_local_cache) {
-            for (String column_key1:column_key_set) {
-                String str = topkcache.get(key+column_key1);
-                if(str!=null)
+//            ret = topkcache.get(key);
+            if(ret!=null) {
+                Iterator<String> it =ret.keySet().iterator();
+                while(it.hasNext())
                 {
-                    ret.put(column_key1,str);
-                    column_key_set.remove(column_key1);
+                    String tem =it.next();
+                    if(!column_keys.contains(tem)){
+                        ret.remove(tem);
+                    }
                 }
-            }
-            if(column_key_set.size()==0) {
                 return ret;
             }
         }
         if(is_memcached) {
-            for(String column_key1:column_key_set){
-                String str = memcache.get(key+column_key1);
-                if(str!=null){
-                    ret.put(column_key1,str);
-                    column_key_set.remove(column_key1);
+            if(ret!=null){
+                Iterator<String> it =ret.keySet().iterator();
+                while(it.hasNext())
+                {
+                    String value =it.next();
+                    if(!column_keys.contains(value)){
+                        ret.remove(value);
+                    }
                 }
-            }
-            if(column_key_set.size()==0)
-            {
                 return ret;
             }
         }
         try {
-            HashMap<String,String> tem = TableOperator.getData(tableName,row_key,column_family,column_key_set);
-            Iterator<String> it =tem.keySet().iterator();
+            ret = TableOperator.getData(tableName,row_key,column_family);
+            Iterator<String> it =ret.keySet().iterator();
+            if (is_local_cache) {
+//                topkcache.set(key, ret);
+            }
+            if (is_memcached) {
+//                memcache.set(key, ret, 1000);
+            }
             while(it.hasNext()) {
                 String value =it.next();
-                if (is_local_cache) {
-                    topkcache.set(key+value, tem.get(value));
+                if(!column_keys.contains(value)){
+                    ret.remove(value);
                 }
-                if (is_memcached) {
-                    memcache.set(key+value, tem.get(value), 1000);
-                }
-                ret.put(value,tem.get(value));
             }
         } catch (IOException e) {
             e.printStackTrace();
