@@ -116,6 +116,7 @@ public class TopKCache {
                 Entry update0 = nodes.get(arg0);
                 Entry update1 = nodes.get(arg1);
                 double v1 = update1.hot - update0.hot;
+                v1 = v1*1000000;
                 int ret =(int)v1;
                 return ret;
             }
