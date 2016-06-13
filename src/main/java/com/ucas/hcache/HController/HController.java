@@ -112,7 +112,20 @@ public class HController {
         }
         return  value;
     }
-
+    public HashMap<String,String> judgeColumn(HashMap<String,String> ret,Set<String>column_keys)
+    {
+        if (!column_keys.isEmpty()){
+            Iterator<String> it =ret.keySet().iterator();
+            while(it.hasNext())
+            {
+                String tem =it.next();
+                if(!column_keys.contains(tem)){
+                    ret.remove(tem);
+                }
+            }
+        }
+        return ret;
+    }
     /**
      * reconstruction
      * @param tableName tableName
@@ -127,28 +140,12 @@ public class HController {
         if(is_local_cache) {
 //            ret = topkcache.get(key);
             if(ret!=null) {
-                Iterator<String> it =ret.keySet().iterator();
-                while(it.hasNext())
-                {
-                    String tem =it.next();
-                    if(!column_keys.contains(tem)){
-                        ret.remove(tem);
-                    }
-                }
-                return ret;
+                return judgeColumn(ret,column_keys);
             }
         }
         if(is_memcached) {
             if(ret!=null){
-                Iterator<String> it =ret.keySet().iterator();
-                while(it.hasNext())
-                {
-                    String value =it.next();
-                    if(!column_keys.contains(value)){
-                        ret.remove(value);
-                    }
-                }
-                return ret;
+                return judgeColumn(ret,column_keys);
             }
         }
         try {
@@ -160,12 +157,7 @@ public class HController {
             if (is_memcached) {
 //                memcache.set(key, ret, 1000);
             }
-            while(it.hasNext()) {
-                String value =it.next();
-                if(!column_keys.contains(value)){
-                    ret.remove(value);
-                }
-            }
+            judgeColumn(ret,column_keys);
         } catch (IOException e) {
             e.printStackTrace();
         }
