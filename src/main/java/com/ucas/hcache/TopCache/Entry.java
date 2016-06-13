@@ -32,7 +32,7 @@ public class Entry
      *
      * @return
      */
-    public HashMap getValue()
+    public HashMap<String, String> getValue()
     {
         return value;
     }

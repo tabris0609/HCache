@@ -160,7 +160,7 @@ public class TopKCache {
      * @param key
      * @return
      */
-    public HashMap get(String key)
+    public HashMap<String, String> get(String key)
     {
         Entry cur = nodes.get(key);
         if(nodes.contains(key))
