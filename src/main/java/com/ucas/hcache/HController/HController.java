@@ -8,6 +8,7 @@ import java.util.*;
 import com.google.protobuf.ByteString;
 import com.ucas.hcache.TopCache.TopKCache;
 import com.ucas.hcache.memcached.MemCached;
+import com.ucas.hcache.memcached.MemCachedHash;
 
 /**
  * Created by liujingkun on 16/6/10.
@@ -22,7 +23,7 @@ public class HController {
     private boolean is_memcached = false;
     private boolean is_local_cache = false;
     private String strategy = "hot";
-    private MemCached memcache;
+    private MemCachedHash memcache;
     private TopKCache topkcache;
 
     /**
@@ -44,7 +45,7 @@ public class HController {
         /*System.out.println(this.is_local_cache);
         System.out.println(this.is_memcached);*/
         if (this.is_memcached) {
-            this.memcache = new MemCached();
+            this.memcache = new MemCachedHash();
         }
         if (this.is_local_cache) {
             this.topkcache = new TopKCache(cache_size, threshold, strategy);
@@ -87,22 +88,23 @@ public class HController {
      */
     public String get(String tableName,String row_key, String column_family,String column_key){
         String key =tableName+row_key+column_family;
+        HashMap<String,String> ret =null;
         if(is_local_cache) {
-            HashMap<String,String> ret = topkcache.get(key);
+            ret = topkcache.get(key);
             if(ret!=null)
                 return  ret.get(column_key);
         }
         if(is_memcached) {
-            String str = memcache.get(key);
-            if(str!=null)
-                return str;
+             ret = memcache.get(key);
+            if(ret!=null)
+                return ret.get(column_key);
         }
         String value = null;
         try {
-            HashMap<String,String> cur_map= TableOperator.getData(tableName,row_key,column_family);
-            value = cur_map.get(column_key);
+            ret = TableOperator.getData(tableName,row_key,column_family);
+            value = ret.get(column_key);
             if(is_local_cache){
-                topkcache.set(key,cur_map);
+                topkcache.set(key,ret);
             }
             if(is_memcached){
 //                memcache.set(key,cur_map,1000);
@@ -151,7 +153,7 @@ public class HController {
             }
         }
         if(is_memcached) {
-//            ret = memcache.get(key);
+            ret = memcache.get(key);
             if(ret!=null){
                 return judgeColumn(ret,column_keys);
             }
@@ -163,7 +165,7 @@ public class HController {
                 topkcache.set(key, ret);
             }
             if (is_memcached) {
-//                memcache.set(key, ret, 1000);
+                memcache.set(key, ret, 1000);
             }
             judgeColumn(ret,column_keys);
         } catch (IOException e) {
@@ -191,7 +193,7 @@ public class HController {
                 return  1;
         }
         if(is_memcached) {
-            String str = memcache.get(key);
+            HashMap<String,String> str = memcache.get(key);
             if(str!=null)
                 return 2;
         }
