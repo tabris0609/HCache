@@ -59,7 +59,7 @@ public class MemCachedHash {
         boolean flag = false;
         Object obj = null;
         try {
-            obj = mc.get(key);
+            obj = mc.delete(key);
             return obj != null;
         } catch (InterruptedException e) {
             e.printStackTrace();
