@@ -3,10 +3,13 @@ package com.ucas.hcache.HController;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.util.ConcatenatedLists;
 import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -102,27 +105,32 @@ public class TableOperator {
      * hbase columnFamily
      * @param row_key
      * hbase row_key
-     * @param col_key
+     * @param col_keys
      * hbase column key
      * @return String value
      * @throws IOException
      */
     public static HashMap<String, String> getData(String tableName, String row_key,
-                                 String columnFamily, Set<String> col_keys) throws IOException {
+                                 String columnFamily) throws IOException {
         HTable hTable = null;
-        HashMap<String, String> map = null;
+        HashMap<String, String> map = new HashMap<String, String>();
         hTable = get_hTable(tableName);
         Get get = new Get(row_key.getBytes());
         get.addFamily(columnFamily.getBytes());
-        for (String col_key: col_keys) {
-            get.addColumn(columnFamily.getBytes(), col_key.getBytes());
-        }
-        Result result = hTable.get(get);
+        Result result = null;
+
+        result = hTable.get(get);
+
         for (Cell cell: result.rawCells()){
-            map.put(CellUtil.cloneFamily(cell).toString(),
-                    CellUtil.cloneValue(cell).toString()
+            map.put(new String(CellUtil.cloneQualifier(cell)),
+                    new String(CellUtil.cloneValue(cell))
             );
         }
+//        Iterator iter = map.entrySet().iterator();
+//        while (iter.hasNext()){
+//            Map.Entry entry = (Map.Entry) iter.next();
+//            System.out.println(entry.getValue().toString());
+//        }
         return map;
     }
 
