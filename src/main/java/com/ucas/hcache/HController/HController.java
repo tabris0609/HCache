@@ -160,14 +160,13 @@ public class HController {
         }
         try {
             ret = TableOperator.getData(tableName,row_key,column_family);
-            Iterator<String> it =ret.keySet().iterator();
             if (is_local_cache) {
                 topkcache.set(key, ret);
             }
             if (is_memcached) {
                 memcache.set(key, ret, 1000);
             }
-            judgeColumn(ret,column_keys);
+            ret = judgeColumn(ret,column_keys);
         } catch (IOException e) {
             e.printStackTrace();
         }
