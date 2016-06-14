@@ -32,8 +32,8 @@ public class HController {
      * @throws IOException
      */
     public HController() throws IOException{
-        //InputStream in = this.getClass().getClassLoader().getResourceAsStream("HCache.conf");
-        InputStream in = new BufferedInputStream(new FileInputStream("/Users/liujingkun/HCache.conf"));
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("HCache.conf");
+        //InputStream in = new BufferedInputStream(new FileInputStream("/Users/liujingkun/HCache.conf"));
         Properties properties = new Properties();
         properties.load(in);
 
